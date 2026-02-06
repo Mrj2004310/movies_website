@@ -10,8 +10,12 @@ return new class extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
+            $table->string('movie_name');
+            $table->string('discription');
+            $table->integer('release_date');
+            $table->string('movie_path');
+            $table->float('rating');
+            $table->string('poster_path');
             $table->timestamps();
         });
     }
