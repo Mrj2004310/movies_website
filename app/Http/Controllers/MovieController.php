@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
+    public function index()
+    {
+        $genres = Genre::all();
+        return view('upload', compact('genres'));
+    }
+
     public function upload(Request $request)
     {
         $request->validate([
@@ -25,19 +33,40 @@ class MovieController extends Controller
 
         $movie = new Movie();
         $movie->name = $request->name;
-        $movie->genre = $request->genre;
         $movie->year = $request->year;
-        $movie->video_path = $video_path;
-        $movie->image_path = $image_path;
+        $movie->description = $request->description;
+        $movie->release_date = $request->release_date;
+        $movie->rating = $request->rating;
+        $movie->poster_path = $request->poster_path;
         $movie->save();
 
-        return redirect()->route('/');
+        // if($request->genre_name)
+        // {
+        //     $genre = new Genre();
+        //     $genre->genre_name = $request->genre_name;
+        //     $genre->save();
+        //     // $movie->genres()->attach($genre->id);
+        // }
+
+
+        return redirect()->route('index');
+    }
+
+    public function update_genra($name){
+        $genre = new Genre();
+        $genre->genre_name = $name->genre_name;
+        $genre->save();
+    }
+    
+    public function load(){
+        $movies=Movie::all();
+        return view("index",compact("movies"));
     }
 
     public function show($id)
     {
         $movie = Movie::find($id);
-        return view('movie.show', compact('movie'));
+        return view('movie', compact('movie'));
     }
 
     public function edit($id)
